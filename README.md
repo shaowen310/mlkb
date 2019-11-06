@@ -1,1 +1,1 @@
-# deeplearning-practice
+# Neural Network Practice
