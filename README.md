@@ -1,1 +1,1 @@
-# Neural Network Practice
+# Machine Learning Practice
