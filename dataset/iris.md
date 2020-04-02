@@ -4,7 +4,11 @@ The data set consists of 50 samples from each of three species of Iris (Setosa, 
 
 ## Load data
 
+### Scikit-learn
+
 ```python
+from sklearn import datasets
+
 iris = datasets.load_iris()
 X = iris.data
 y = iris.target
