@@ -104,6 +104,7 @@ venv.bak/
 .mypy_cache/
 
 *.pt
+*.npy
 
 data/
 .data/
