@@ -12,9 +12,11 @@ b0 = torch.zeros((1, ))
 c0 = torch.arange(0, 3)
 # random
 r0 = torch.rand((3, ))  # uniform distribution [0,1)
+r01 = torch.rand(3, 1)  # or int...
 r1 = torch.randn((3, ))  # normal distribution [0,1)
-r1 = torch.randint(0, 3, (3, ))
-r2 = torch.randperm(3)
+r11 = torch.randn(3, 1)  # or int...
+r2 = torch.randint(0, 3, (3, ))
+r3 = torch.randperm(3)
 
 # %%
 # Transform
