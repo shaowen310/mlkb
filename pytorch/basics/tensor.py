@@ -26,6 +26,24 @@ a0 = x.view((1, -1))
 # transpose
 t0 = x.T  # size ((3,2,1))
 t1 = torch.transpose(x, 0, 1)
+# reallocate contiguous memory
+t2 = t1.contiguous()
+
+# %%
+# Truncate
+x = torch.randn(2, 2, 2)
+# similar to x[:1, :, :] but does not allocate new storage
+t0 = x.narrow(0, 0, 1)
+
+# %%
+# Concatenate
+x = torch.randn(2, 3)
+c0 = torch.cat((x, x, x), dim=0)  # along axis 0, size = (6, 3)
+c1 = torch.cat((x, x, x))  # dim = 0 by default
+seqs = [torch.tensor([1,2], dtype=torch.int64)]
+seqs.append(torch.tensor([3,4,5], dtype=torch.int64))
+c2 = torch.cat(seqs) # dim = 0, then concatenate all
+
 # %%
 # Aggregation
 x = torch.arange(0, 9).view((3, 3))
