@@ -22,7 +22,7 @@ class Dictionary:
 
 class Corpus:
     def __init__(self, path):
-        self.dictionary = Dictionary()
+        self.dict = Dictionary()
         self.train = self.tokenize(os.path.join(path, 'train.txt'))
         self.valid = self.tokenize(os.path.join(path, 'valid.txt'))
         self.test = self.tokenize(os.path.join(path, 'test.txt'))
@@ -35,7 +35,7 @@ class Corpus:
             for line in f:
                 words = line.split() + ['<eos>']
                 for word in words:
-                    self.dictionary.add_word(word)
+                    self.dict.add_word(word)
 
         # Tokenize file content
         with open(path, 'r', encoding="utf8") as f:
@@ -44,7 +44,7 @@ class Corpus:
                 words = line.split() + ['<eos>']
                 ids = []
                 for word in words:
-                    ids.append(self.dictionary.word2idx[word])
+                    ids.append(self.dict.word2idx[word])
                 idss.append(torch.tensor(ids).type(torch.int64))
             ids = torch.cat(idss)
 

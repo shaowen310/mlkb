@@ -9,3 +9,12 @@ class TwoLayerNN(nn.Module):
 
     def forward(self, inputs):
         pass
+
+
+# %%
+# number of trainable parameters
+def n_params(net):
+    nb_params = 0
+    for param in net.parameters():
+        nb_params += param.numel()
+    return nb_params
