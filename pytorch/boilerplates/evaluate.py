@@ -8,7 +8,7 @@ def evaluate(model, dataloader, criterion):
 
     with torch.no_grad():
         for elems, labels in dataloader:
-            preds = model(elems).squeeze(1)
+            preds = model(elems)
             loss = criterion(preds, labels)
 
             epoch_loss += loss.item()

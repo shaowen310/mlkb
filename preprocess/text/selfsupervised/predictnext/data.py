@@ -51,23 +51,6 @@ class Corpus:
         return ids
 
 
-def batchify(data, bsz):
-    # Work out how cleanly we can divide the dataset into bsz parts.
-    nbatch = data.size(0) // bsz
-    # Trim off any extra elements that wouldn't cleanly fit (remainders).
-    data = data.narrow(0, 0, nbatch * bsz)
-    # Evenly divide the data across the bsz batches.
-    data = data.view(bsz, -1).t().contiguous()
-    return data
-
-
-def get_batch(source, i, bptt):
-    seq_len = min(bptt, len(source) - 1 - i)
-    data = source[i:i + seq_len]
-    target = source[i + 1:i + 1 + seq_len].view(-1)
-    return data, target
-
-
 class TextCorpusDatasetCollection:
     def __init__(self, root_dir, window_size):
         '''
