@@ -11,12 +11,12 @@ import torch.nn.functional as F
 
 # %%
 class NPLM(nn.Module):
-    def __init__(self, vocab_size, embedding_dim, hidden_dim, out_dim):
+    def __init__(self, vocab_size, embedding_dim, hidden_dim):
         super().__init__()
         self.C = nn.Embedding(vocab_size, embedding_dim)
         self.H = nn.Linear(embedding_dim, hidden_dim)
-        self.U = nn.Linear(hidden_dim, out_dim, False)
-        self.W = nn.Linear(embedding_dim, out_dim)
+        self.U = nn.Linear(hidden_dim, vocab_size, False)
+        self.W = nn.Linear(embedding_dim, vocab_size)
 
     def forward(self, inputs):
         '''
