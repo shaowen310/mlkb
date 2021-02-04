@@ -1,17 +1,20 @@
-def train(model, iterator, optimizer, criterion):
+def train(model, dataloader, optimizer, criterion, device):
     epoch_loss = 0
 
     model.train()
 
-    for batch in iterator:
+    for elems, labels in dataloader:
+        elems = elems.to(device)
+        labels = labels.to(device)
+
         optimizer.zero_grad()
 
-        predictions = model(batch.text).squeeze(1)
-        loss = criterion(predictions, batch.label)
+        preds = model(elems).squeeze(1)
+        loss = criterion(preds, labels)
 
         loss.backward()
         optimizer.step()
 
         epoch_loss += loss.item()
 
-    return epoch_loss / len(iterator)
+    return epoch_loss / len(dataloader)

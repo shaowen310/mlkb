@@ -26,3 +26,5 @@ model = torch.load('model.ckpt')
 # Save and load only the model parameters (recommended).
 torch.save(resnet.state_dict(), 'params.ckpt')
 resnet.load_state_dict(torch.load('params.ckpt'))
+
+# %%

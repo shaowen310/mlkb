@@ -1,15 +1,15 @@
 import torch
 
 
-def evaluate(model, iterator, criterion):
+def evaluate(model, dataloader, criterion):
     epoch_loss = 0
 
     model.eval()
 
     with torch.no_grad():
-        for batch in iterator:
-            predictions = model(batch.text).squeeze(1)
-            loss = criterion(predictions, batch.label)
+        for elems, labels in dataloader:
+            preds = model(elems).squeeze(1)
+            loss = criterion(preds, labels)
 
             epoch_loss += loss.item()
 

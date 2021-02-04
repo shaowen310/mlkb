@@ -29,4 +29,6 @@ class NPLM(nn.Module):
 
 
 # %%
-nplm = NPLM(5000, 256, 600, 10)
+nplm = NPLM(5000, 8, 128, 10)
+
+# %%

@@ -51,14 +51,14 @@ class Corpus:
         return ids
 
 
-def batchify(data, bsz, device='cpu'):
+def batchify(data, bsz):
     # Work out how cleanly we can divide the dataset into bsz parts.
     nbatch = data.size(0) // bsz
     # Trim off any extra elements that wouldn't cleanly fit (remainders).
     data = data.narrow(0, 0, nbatch * bsz)
     # Evenly divide the data across the bsz batches.
     data = data.view(bsz, -1).t().contiguous()
-    return data.to(device)
+    return data
 
 
 def get_batch(source, i, bptt):
@@ -66,3 +66,30 @@ def get_batch(source, i, bptt):
     data = source[i:i + seq_len]
     target = source[i + 1:i + 1 + seq_len].view(-1)
     return data, target
+
+
+class TextCorpusDatasetCollection:
+    def __init__(self, root_dir, window_size):
+        '''
+        file organization
+        Train: root_dir/train.txt
+        Test: root_dir/text.txt
+        Validation: root_dir/valid.txt
+        '''
+        self.root_dir = root_dir
+        self.corpus = Corpus(root_dir)
+        self.train = TextCorpusDataset(self.corpus.train, window_size)
+        self.test = TextCorpusDataset(self.corpus.test, window_size)
+        self.valid = TextCorpusDataset(self.corpus.valid, window_size)
+
+
+class TextCorpusDataset(torch.utils.data.Dataset):
+    def __init__(self, text_ids, window_size):
+        self.data = text_ids
+        self.window_size = window_size
+
+    def __getitem__(self, idx):
+        return self.data[idx:idx + self.window_size], self.data[idx + self.window_size]
+
+    def __len__(self):
+        return len(self.data) - self.window_size
