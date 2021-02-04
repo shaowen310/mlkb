@@ -13,4 +13,4 @@ def evaluate(model, dataloader, criterion):
 
             epoch_loss += loss.item()
 
-    return epoch_loss / len(iterator)
+    return epoch_loss / len(dataloader)
