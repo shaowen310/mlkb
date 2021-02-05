@@ -32,8 +32,9 @@ def train_one_epoch(epoch,
         loss.backward()
         optimizer.step()
 
-        epoch_loss += loss.item()
-        log_loss += loss.item()
+        batch_loss = loss.item()
+        epoch_loss += batch_loss
+        log_loss += batch_loss
 
         if log_enabled and batch % log_interval == 0 and batch > 0:
             cur_loss = log_loss / log_interval
