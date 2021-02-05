@@ -1,10 +1,6 @@
 import math
 import time
-
-
-def step_decay(epoch, initial_lrate, drop, epochs_drop):
-    lrate = initial_lrate * math.pow(drop, (1 + epoch) // epochs_drop)
-    return lrate
+import torch
 
 
 def train_one_epoch(epoch, model, dataloader, optimizer, criterion, device, log_interval=100):
@@ -42,3 +38,16 @@ def train_one_epoch(epoch, model, dataloader, optimizer, criterion, device, log_
             start_time = time.time()
 
     return epoch_loss / len(dataloader)
+
+
+if __name__ == '__main__':
+    model = torch.nn.Linear(10, 10)
+
+    optimizer = torch.optim.SGD(model.parameters())
+    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=30, gamma=0.1)
+
+    for epoch in range(5):
+        pass
+
+    # reset scheduler
+    # scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=30, gamma=0.1)
