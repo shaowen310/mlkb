@@ -55,6 +55,3 @@ if __name__ == '__main__':
 
     for epoch in range(5):
         print('epoch {} | epoch_loss {}'.format(epoch, epoch_loss))
-
-    # reset scheduler
-    # scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=30, gamma=0.1)
