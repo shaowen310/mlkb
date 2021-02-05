@@ -1,7 +1,11 @@
+import math
 import time
 
 
 def train_one_epoch(epoch, model, dataloader, optimizer, criterion, device, log_interval=100):
+    model.to(device)
+    criterion.to(device)
+    
     model.train()
 
     epoch_loss = 0
