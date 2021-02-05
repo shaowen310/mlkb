@@ -21,7 +21,7 @@ class Dictionary:
         return len(self.idx2word)
 
     def save(self, fp):
-        pickle.save(self.idx2word, open(fp, 'wb'))
+        pickle.dump(self.idx2word, open(fp, 'wb'))
 
     def load(self, fp):
         self.idx2word = pickle.load(open(fp, 'rb'))
@@ -72,7 +72,7 @@ class Corpus:
 
     def load(self, root_dir):
         self.dict.load(os.path.join(root_dir, 'dict.pickle'))
-        self.train = torch.load(os.path.join(root_dir, 'trian.pt'))
+        self.train = torch.load(os.path.join(root_dir, 'train.pt'))
         self.valid = torch.load(os.path.join(root_dir, 'valid.pt'))
         self.test = torch.load(os.path.join(root_dir, 'test.pt'))
 
@@ -103,6 +103,9 @@ class TextCorpusDatasetCollection:
         self.corpus.parse(root_dir)
         self.init_datasets()
 
+    def save(self, root_dir):
+        self.corpus.save(root_dir)
+
     def load(self, root_dir, window_size):
         '''
         file organization
@@ -113,6 +116,7 @@ class TextCorpusDatasetCollection:
         '''
         self.root_dir = root_dir
         self.window_size = window_size
+        self.corpus = Corpus()
         self.corpus.load(root_dir)
         self.init_datasets()
 
@@ -136,9 +140,11 @@ if __name__ == '__main__':
 
     ds_collection = None
     if parsed:
-        ds_collection = TextCorpusDatasetCollection().load(data_dir, window_size)
+        ds_collection = TextCorpusDatasetCollection()
+        ds_collection.load(data_dir, window_size)
     else:
-        ds_collection = TextCorpusDatasetCollection().parse(data_dir, window_size)
+        ds_collection = TextCorpusDatasetCollection()
+        ds_collection.parse(data_dir, window_size)
         ds_collection.save(data_dir)
     ds_train = ds_collection.train
     ds_valid = ds_collection.valid
