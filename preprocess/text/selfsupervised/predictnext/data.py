@@ -78,18 +78,43 @@ class Corpus:
 
 
 class TextCorpusDatasetCollection:
-    def __init__(self, root_dir, window_size):
+    def __init__(self):
+        self.root_dir = ''
+        self.corpus = None
+        self.train = None
+        self.test = None
+        self.valid = None
+
+    def init_datasets(self):
+        self.train = TextCorpusDataset(self.corpus.train, self.window_size)
+        self.test = TextCorpusDataset(self.corpus.test, self.window_size)
+        self.valid = TextCorpusDataset(self.corpus.valid, self.window_size)
+
+    def parse(self, root_dir, window_size):
         '''
         file organization
         Train: root_dir/train.txt
-        Test: root_dir/text.txt
+        Test: root_dir/test.txt
         Validation: root_dir/valid.txt
         '''
         self.root_dir = root_dir
-        self.corpus = Corpus(root_dir)
-        self.train = TextCorpusDataset(self.corpus.train, window_size)
-        self.test = TextCorpusDataset(self.corpus.test, window_size)
-        self.valid = TextCorpusDataset(self.corpus.valid, window_size)
+        self.window_size = window_size
+        self.corpus = Corpus()
+        self.corpus.parse(root_dir)
+        self.init_datasets()
+
+    def load(self, root_dir, window_size):
+        '''
+        file organization
+        Dictionary: root_dir/dict.pickle
+        Train: root_dir/train.pt
+        Test: root_dir/test.pt
+        Validation: root_dir/valid.pt
+        '''
+        self.root_dir = root_dir
+        self.window_size = window_size
+        self.corpus.load(root_dir)
+        self.init_datasets()
 
 
 class TextCorpusDataset(torch.utils.data.Dataset):
@@ -102,3 +127,16 @@ class TextCorpusDataset(torch.utils.data.Dataset):
 
     def __len__(self):
         return len(self.data) - self.window_size
+
+
+if __name__ == '__main__':
+    parsed = False
+
+    ds_collection = None
+    if parsed:
+        ds_collection = TextCorpusDatasetCollection().load(data_dir, window_size)
+    else:
+        ds_collection = TextCorpusDatasetCollection().parse(data_dir, window_size)
+    ds_train = ds_collection.train
+    ds_valid = ds_collection.valid
+    ds_test = ds_collection.test
