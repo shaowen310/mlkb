@@ -3,7 +3,14 @@ import time
 import torch
 
 
-def train_one_epoch(epoch, model, dataloader, optimizer, criterion, device, log_interval=100):
+def train_one_epoch(epoch,
+                    model,
+                    dataloader,
+                    optimizer,
+                    criterion,
+                    device,
+                    log_enabled=True,
+                    log_interval=1000):
     model.to(device)
     criterion.to(device)
 
@@ -28,10 +35,10 @@ def train_one_epoch(epoch, model, dataloader, optimizer, criterion, device, log_
         epoch_loss += loss.item()
         log_loss += loss.item()
 
-        if batch % log_interval == 0 and batch > 0:
+        if log_enabled and batch % log_interval == 0 and batch > 0:
             cur_loss = log_loss / log_interval
             elapsed = time.time() - start_time
-            print('| epoch {:3d} | {:5d} batches | {:5.2f} ms/batch | '
+            print('| epoch {:3d} | {:5d} batches | {:5.2f} ms/batch  | '
                   'loss {:5.2f} | ppl {:8.2f}'.format(epoch, batch, elapsed * 1000 / log_interval,
                                                       cur_loss, math.exp(cur_loss)))
             log_loss = 0
