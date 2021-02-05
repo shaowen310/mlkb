@@ -3,6 +3,7 @@
 import os
 from io import open
 import torch
+import pickle
 
 
 class Dictionary:
@@ -19,9 +20,22 @@ class Dictionary:
     def __len__(self):
         return len(self.idx2word)
 
+    def save(self, fp):
+        pickle.save(self.idx2word, open(fp, 'wb'))
+
+    def load(self, fp):
+        self.idx2word = pickle.load(open(fp, 'rb'))
+        self.word2idx = {word: idx for idx, word in enumerate(self.idx2word)}
+
 
 class Corpus:
-    def __init__(self, path):
+    def __init__(self):
+        self.dict = Dictionary()
+        self.train = torch.tensor(())
+        self.valid = torch.tensor(())
+        self.text = torch.tensor(())
+
+    def parse(self, path):
         self.dict = Dictionary()
         self.train = self.tokenize(os.path.join(path, 'train.txt'))
         self.valid = self.tokenize(os.path.join(path, 'valid.txt'))
@@ -49,6 +63,18 @@ class Corpus:
             ids = torch.cat(idss)
 
         return ids
+
+    def save(self, root_dir):
+        self.dict.save(os.path.join(root_dir, 'dict.pickle'))
+        torch.save(self.train, os.path.join(root_dir, 'train.pt'))
+        torch.save(self.valid, os.path.join(root_dir, 'valid.pt'))
+        torch.save(self.test, os.path.join(root_dir, 'test.pt'))
+
+    def load(self, root_dir):
+        self.dict.load(os.path.join(root_dir, 'dict.pickle'))
+        self.train = torch.load(os.path.join(root_dir, 'trian.pt'))
+        self.valid = torch.load(os.path.join(root_dir, 'valid.pt'))
+        self.test = torch.load(os.path.join(root_dir, 'test.pt'))
 
 
 class TextCorpusDatasetCollection:
