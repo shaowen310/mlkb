@@ -2,10 +2,15 @@ import math
 import time
 
 
+def step_decay(epoch, initial_lrate, drop, epochs_drop):
+    lrate = initial_lrate * math.pow(drop, (1 + epoch) // epochs_drop)
+    return lrate
+
+
 def train_one_epoch(epoch, model, dataloader, optimizer, criterion, device, log_interval=100):
     model.to(device)
     criterion.to(device)
-    
+
     model.train()
 
     epoch_loss = 0

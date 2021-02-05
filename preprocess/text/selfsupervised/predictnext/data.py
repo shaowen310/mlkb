@@ -139,6 +139,7 @@ if __name__ == '__main__':
         ds_collection = TextCorpusDatasetCollection().load(data_dir, window_size)
     else:
         ds_collection = TextCorpusDatasetCollection().parse(data_dir, window_size)
+        ds_collection.save(data_dir)
     ds_train = ds_collection.train
     ds_valid = ds_collection.valid
     ds_test = ds_collection.test
