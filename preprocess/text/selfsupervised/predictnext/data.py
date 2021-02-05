@@ -131,6 +131,8 @@ class TextCorpusDataset(torch.utils.data.Dataset):
 
 if __name__ == '__main__':
     parsed = False
+    data_dir = ''
+    window_size = 1
 
     ds_collection = None
     if parsed:
