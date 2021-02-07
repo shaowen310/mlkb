@@ -8,6 +8,10 @@ Given sequences and labels, we want to train a model that can predict label for 
 
 Sequences of different lengths.
 
+Solutions:
+
+1. Cut and padding
+
 ## Model
 
 LSTM
@@ -21,3 +25,5 @@ BCEWithLogitsLoss if labels contain confidence level
 ## Extension
 
 Multi-class problem
+
+BCEWithLogitsLoss
