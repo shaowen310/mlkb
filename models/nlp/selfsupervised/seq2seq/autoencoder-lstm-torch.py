@@ -11,12 +11,7 @@ device = 'cuda'  #'cpu'
 
 # %%
 class EncoderLSTM(nn.Module):
-    def __init__(self,
-                 input_size,
-                 hidden_size,
-                 n_layers,
-                 bidirectional,
-                 dropout=0.2):
+    def __init__(self, input_size, hidden_size, n_layers, bidirectional, dropout=0.2):
         super(EncoderLSTM, self).__init__()
         self.hidden_size = hidden_size
         self.n_layers = n_layers
@@ -46,12 +41,7 @@ class EncoderLSTM(nn.Module):
 
 
 class DecoderLSTM(nn.Module):
-    def __init__(self,
-                 hidden_size,
-                 output_size,
-                 num_layers,
-                 bidirectional,
-                 dropout=0.2):
+    def __init__(self, hidden_size, output_size, num_layers, bidirectional, dropout=0.2):
         super(DecoderLSTM, self).__init__()
         self.hidden_size = hidden_size
         self.output_size = output_size
@@ -71,10 +61,8 @@ class DecoderLSTM(nn.Module):
 
     def forward(self, x):
         # set initial hidden and cell states
-        h0 = torch.zeros(self.num_layers, x.size(0),
-                         self.output_size).to(device)
-        c0 = torch.zeros(self.num_layers, x.size(0),
-                         self.output_size).to(device)
+        h0 = torch.zeros(self.num_layers, x.size(0), self.output_size).to(device)
+        c0 = torch.zeros(self.num_layers, x.size(0), self.output_size).to(device)
 
         # forward propagate lstm
         out, _ = self.lstm(x, (h0, c0))
@@ -86,10 +74,8 @@ class DecoderLSTM(nn.Module):
 class AutoEncoderLSTM(nn.Module):
     def __init__(self, input_size, hidden_size, n_layers, bidirectional=False):
         super(AutoEncoderLSTM, self).__init__()
-        self.encoder = EncoderLSTM(input_size, hidden_size, n_layers,
-                                   bidirectional)
-        self.decoder = DecoderLSTM(hidden_size, input_size, n_layers,
-                                   bidirectional)
+        self.encoder = EncoderLSTM(input_size, hidden_size, n_layers, bidirectional)
+        self.decoder = DecoderLSTM(hidden_size, input_size, n_layers, bidirectional)
 
     def forward(self, x):
         encoded_x = self.encoder(x)
@@ -122,9 +108,9 @@ def train_eval(model, dl, optimizer, criterion, phase):
             x_out = model(x)
             inv_idx = torch.arange(seq_len - 1, -1, -1).long()
 
-            diff = (x_out - x[:, inv_idx, :]).cpu().detach().numpy()
+            diff = (x_out - x[:, inv_idx, :]).detach().cpu().numpy()
             print(diff)
-            print(np.sqrt(np.sum(diff ** 2)))
+            print(np.sqrt(np.sum(diff**2)))
             print(np.linalg.norm(diff))
 
             loss = criterion(x_out, x[:, inv_idx, :])
