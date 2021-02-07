@@ -1,4 +1,4 @@
-def n_params(net):
+def total_params(net):
     nb_params = 0
     for param in net.parameters():
         nb_params += param.numel()
@@ -7,6 +7,5 @@ def n_params(net):
 
 # Credit Xavier Bresson CE7454 Github utils.py
 def display_num_param(net):
-    nb_params = n_params(net)
-    print('There are {} ({:.2f} million) parameters in this neural network'.format(
-        nb_params, nb_params / 1e6))
+    nb_params = total_params(net)
+    print('There are {} ({:.2f} million) parameters in this neural network'.format(nb_params, nb_params / 1e6))

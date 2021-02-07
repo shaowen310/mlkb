@@ -3,4 +3,9 @@ import torch
 
 # %%
 # Device configuration
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+if torch.cuda.is_available():
+    device = torch.device('cuda:{}'.format(torch.cuda.device_count() - 1))
+else:
+    device = torch.device('cpu')
+
+torch.cuda.set_device(torch.cuda.device_count() - 1)
