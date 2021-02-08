@@ -52,7 +52,8 @@ class TextCorpusDataset(torch.utils.data.Dataset):
 
     def __getitem__(self, idx):
         sid = idx * self.window_size
-        return self.data[sid:sid + self.window_size], self.data[sid + self.window_size]
+        eid = sid + self.window_size
+        return self.data[sid:eid], self.data[eid]
 
     def __len__(self):
         return (len(self.data) - 1) // self.window_size

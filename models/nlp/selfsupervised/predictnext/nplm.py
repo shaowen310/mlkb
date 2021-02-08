@@ -23,7 +23,7 @@ class NPLM(nn.Module):
         self.__init_weights()
 
     def __init_weights(self):
-        initrange = 1.
+        initrange = 0.1
         nn.init.uniform_(self.embl.weight, -initrange, initrange)
 
     def forward(self, inputs):
