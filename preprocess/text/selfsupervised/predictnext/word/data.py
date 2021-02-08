@@ -1,91 +1,17 @@
 # https://github.com/pytorch/examples/tree/master/word_language_model/
-
-import os
 from io import open
 import torch
-import pickle
-
-
-class Dictionary:
-    def __init__(self):
-        self.word2idx = {}
-        self.idx2word = []
-
-    def add_word(self, word):
-        if word not in self.word2idx:
-            self.idx2word.append(word)
-            self.word2idx[word] = len(self.idx2word) - 1
-        return self.word2idx[word]
-
-    def __len__(self):
-        return len(self.idx2word)
-
-    def save(self, fp):
-        pickle.dump(self.idx2word, open(fp, 'wb'))
-
-    def load(self, fp):
-        self.idx2word = pickle.load(open(fp, 'rb'))
-        self.word2idx = {word: idx for idx, word in enumerate(self.idx2word)}
-
-
-class Corpus:
-    def __init__(self):
-        self.dict = Dictionary()
-        self.train = torch.tensor(())
-        self.valid = torch.tensor(())
-        self.text = torch.tensor(())
-
-    def parse(self, path):
-        self.dict = Dictionary()
-        self.train = self.tokenize(os.path.join(path, 'train.txt'))
-        self.valid = self.tokenize(os.path.join(path, 'valid.txt'))
-        self.test = self.tokenize(os.path.join(path, 'test.txt'))
-
-    def tokenize(self, path):
-        """Tokenizes a text file."""
-        assert os.path.exists(path)
-        # Add words to the dictionary
-        with open(path, 'r', encoding="utf8") as f:
-            for line in f:
-                words = line.split() + ['<eos>']
-                for word in words:
-                    self.dict.add_word(word)
-
-        # Tokenize file content
-        with open(path, 'r', encoding="utf8") as f:
-            idss = []
-            for line in f:
-                words = line.split() + ['<eos>']
-                ids = []
-                for word in words:
-                    ids.append(self.dict.word2idx[word])
-                idss.append(torch.tensor(ids).type(torch.int64))
-            ids = torch.cat(idss)
-
-        return ids
-
-    def save(self, root_dir):
-        self.dict.save(os.path.join(root_dir, 'dict.pickle'))
-        torch.save(self.train, os.path.join(root_dir, 'train.pt'))
-        torch.save(self.valid, os.path.join(root_dir, 'valid.pt'))
-        torch.save(self.test, os.path.join(root_dir, 'test.pt'))
-
-    def load(self, root_dir):
-        self.dict.load(os.path.join(root_dir, 'dict.pickle'))
-        self.train = torch.load(os.path.join(root_dir, 'train.pt'))
-        self.valid = torch.load(os.path.join(root_dir, 'valid.pt'))
-        self.test = torch.load(os.path.join(root_dir, 'test.pt'))
 
 
 class TextCorpusDatasetCollection:
-    def __init__(self):
+    def __init__(self, corpus):
         self.root_dir = ''
-        self.corpus = None
+        self.corpus = corpus
         self.train = None
         self.test = None
         self.valid = None
 
-    def init_datasets(self):
+    def __init_datasets(self):
         self.train = TextCorpusDataset(self.corpus.train, self.window_size)
         self.test = TextCorpusDataset(self.corpus.test, self.window_size)
         self.valid = TextCorpusDataset(self.corpus.valid, self.window_size)
@@ -99,9 +25,8 @@ class TextCorpusDatasetCollection:
         '''
         self.root_dir = root_dir
         self.window_size = window_size
-        self.corpus = Corpus()
         self.corpus.parse(root_dir)
-        self.init_datasets()
+        self.__init_datasets()
 
     def save(self, root_dir):
         self.corpus.save(root_dir)
@@ -116,9 +41,8 @@ class TextCorpusDatasetCollection:
         '''
         self.root_dir = root_dir
         self.window_size = window_size
-        self.corpus = Corpus()
         self.corpus.load(root_dir)
-        self.init_datasets()
+        self.__init_datasets()
 
 
 class TextCorpusDataset(torch.utils.data.Dataset):
@@ -135,15 +59,16 @@ class TextCorpusDataset(torch.utils.data.Dataset):
 
 if __name__ == '__main__':
     parsed = False
+    corpus = None
     data_dir = ''
     window_size = 1
 
     ds_collection = None
     if parsed:
-        ds_collection = TextCorpusDatasetCollection()
+        ds_collection = TextCorpusDatasetCollection(corpus)
         ds_collection.load(data_dir, window_size)
     else:
-        ds_collection = TextCorpusDatasetCollection()
+        ds_collection = TextCorpusDatasetCollection(corpus)
         ds_collection.parse(data_dir, window_size)
         ds_collection.save(data_dir)
     ds_train = ds_collection.train
