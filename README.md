@@ -4,11 +4,22 @@
 
 Wide -> narrow -> wide
 
-## Related topics
+## Models
 
-Binary classification and noise reduction
+### RNN-like
 
-## LSTM architectures
+#### Stop propagation of hidden layer
 
-### LSTM autoencoder
+```python
+hidden = repackage_hidden(hidden)
+```
 
+After each batch
+
+#### Avoid gradient explosion
+
+```python
+loss.backward()
+nn.utils.clip_grad_norm_(model.parameters(), max_norm=2.0, norm_type=2)
+optimizer.step()
+```

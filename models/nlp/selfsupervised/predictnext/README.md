@@ -36,6 +36,4 @@ Dropout layer after
 1. Embedding
 2. Non-linear layer
 
-Try larger drop rate such as 0.5
-
-### Stop propagation for RNN-like model
+Try larger dropout rate such as 0.5
