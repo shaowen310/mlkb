@@ -59,3 +59,16 @@ class RNNModel(nn.Module):
                                      self.nhid), weight.new_zeros(self.nlayers, bsz, self.nhid))
         else:
             return weight.new_zeros(self.nlayers, bsz, self.nhid)
+
+
+if __name__ == '__main__':
+    lstm = RNNModel('LSTM')
+    batch_size = 128
+
+    def train(model, dataloader):
+        hidden = model.init_hidden(dataloader.dataset.batch_size)
+
+        for batch, (elems, labels) in enumerate(dataloader):
+            preds, hidden = model(elems, hidden)
+
+            hidden = repackage_hidden(hidden)

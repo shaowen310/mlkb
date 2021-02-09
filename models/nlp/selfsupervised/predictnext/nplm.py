@@ -7,6 +7,7 @@
 # %%
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 
 # %%
@@ -33,7 +34,7 @@ class NPLM(nn.Module):
         emb = self.drop(self.embl(inputs)).view((-1, self.emb_window_prod))
         a = self.drop(torch.tanh(self.H(emb)))
         y = self.U(a) + self.W(emb)
-        return y
+        return F.log_softmax(y, dim=1)
 
 
 # %%
