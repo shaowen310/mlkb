@@ -55,8 +55,8 @@ class BatchText:
     def __len__(self):
         return len(self.data)
 
-    def get(self, i, bptt):
-        seq_len = min(bptt, len(self.data) - 1 - i)
-        data = self.data[i:i + seq_len]
-        target = self.data[i + 1:i + 1 + seq_len].view(-1)
+    def get(self, i, seq_len):
+        seq_len_ = min(seq_len, len(self.data) - 1 - i)
+        data = self.data[i:i + seq_len_]
+        target = self.data[i + 1:i + 1 + seq_len_].view(-1)
         return data, target
