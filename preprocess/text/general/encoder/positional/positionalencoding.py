@@ -1,7 +1,7 @@
 # https://github.com/pytorch/examples/blob/master/word_language_model/model.py
 import math
 import torch
-from torch import nn
+import torch.nn as nn
 
 
 class PositionalEncoding(nn.Module):
