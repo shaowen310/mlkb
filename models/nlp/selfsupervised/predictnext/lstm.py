@@ -4,7 +4,14 @@ import torch.nn.functional as F
 
 
 class RNNModel(nn.Module):
-    """Container module with an encoder, a recurrent module, and a decoder."""
+    """Container module with an encoder, a recurrent module, and a decoder.
+    Args:
+        rnn_type: any value of ['LSTM', 'GRU', 'RNN_TANH' or 'RNN_RELU']
+        ntoken: vocab size
+        ninp: embedding dimension
+        nhid: dimension of RNN hidden layer
+        nlayers: the number of stacked RNN layers
+    """
     def __init__(self, rnn_type, ntoken, ninp, nhid, nlayers, dropout=0.5, tie_weights=False):
         super(RNNModel, self).__init__()
         self.ntoken = ntoken

@@ -8,6 +8,10 @@ Given a running text and we extract subsequences with window size $n$. We want t
 
 A neural probabilistic language model (NPLM)
 
+LSTM
+
+LSTM Output -> fully connected -> log-softmax
+
 ## Loss Functions
 
 Cross-entropy loss

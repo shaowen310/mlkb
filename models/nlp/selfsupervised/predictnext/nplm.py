@@ -13,8 +13,12 @@ import torch.nn.functional as F
 # %%
 class NPLM(nn.Module):
     def __init__(self, vocab_size, window_size, embedding_dim, hidden_dim, dropout=0.5):
+        '''
+        Args:
+            window_size: n in "n-gram"
+        '''
         super().__init__()
-        self.emb_window_prod = embedding_dim * window_size
+        self.emb_window_prod = embedding_dim * (window_size - 1)
         self.embl = nn.Embedding(vocab_size, embedding_dim)
         self.H = nn.Linear(self.emb_window_prod, hidden_dim)
         self.U = nn.Linear(hidden_dim, vocab_size, False)

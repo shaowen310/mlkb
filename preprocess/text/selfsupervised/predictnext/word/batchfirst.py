@@ -11,12 +11,11 @@ class CorpusDataset(torch.utils.data.Dataset):
         self.window_size = window_size
 
     def __getitem__(self, idx):
-        sid = idx * self.window_size
-        eid = sid + self.window_size
-        return self.data[sid:eid], self.data[eid]
+        eid = idx + self.window_size - 1
+        return self.data[idx:eid], self.data[eid]
 
     def __len__(self):
-        return (len(self.data) - 1) // self.window_size
+        return len(self.data) - self.window_size + 1
 
 
 if __name__ == '__main__':
