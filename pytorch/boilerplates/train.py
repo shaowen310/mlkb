@@ -40,8 +40,8 @@ def train_one_epoch(epoch,
             cur_loss = log_loss / log_interval
             elapsed = time.time() - start_time
             print('| epoch {:3d} | {:5d} batches | {:5.2f} ms/batch  | '
-                  'loss {:5.2f} | ppl {:8.2f}'.format(epoch, batch, elapsed * 1000 / log_interval,
-                                                      cur_loss, math.exp(cur_loss)))
+                  'loss {:5.2f} | ppl {:8.2f} |'.format(epoch, batch, elapsed * 1000 / log_interval,
+                                                        cur_loss, math.exp(cur_loss)))
             log_loss = 0
             start_time = time.time()
 
