@@ -26,6 +26,7 @@ class PositionalEncoding(nn.Module):
 
         pe = torch.zeros(max_len, embed_dim)
         position = torch.arange(0, max_len, dtype=torch.float).unsqueeze(1)
+        # Math: $$\omega_k = (\frac{1}{10000})^{2k/d} = (e^{-ln(10000)})^{(2k/d)} = e^{-ln(10000) * 2k / d}$$
         div_term = torch.exp(
             torch.arange(0, embed_dim, 2).float() * (-math.log(10000.0) / embed_dim))
         pe[:, 0::2] = torch.sin(position * div_term)
