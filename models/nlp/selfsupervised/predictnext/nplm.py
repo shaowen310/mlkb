@@ -12,7 +12,14 @@ import torch.nn.functional as F
 
 # %%
 class NPLM(nn.Module):
-    def __init__(self, vocab_size, window_size, embedding_dim, hidden_dim, dropout=0.5):
+    def __init__(self,
+                 vocab_size,
+                 window_size,
+                 embedding_dim,
+                 hidden_dim,
+                 dropout=0.5,
+                 tie_weights=False,
+                 direct_connection=False):
         '''
         Args:
             window_size: n in "n-gram"
@@ -21,15 +28,17 @@ class NPLM(nn.Module):
         self.emb_window_prod = embedding_dim * (window_size - 1)
         self.embl = nn.Embedding(vocab_size, embedding_dim)
         self.H = nn.Linear(self.emb_window_prod, hidden_dim)
-        self.U = nn.Linear(hidden_dim, vocab_size, False)
-        self.W = nn.Linear(self.emb_window_prod, vocab_size)
+        self.U = nn.Linear(hidden_dim, vocab_size)
+        if tie_weights:
+            if hidden_dim != embedding_dim:
+                raise ValueError(
+                    'When using the tied flag, hidden_dim must be equal to embedding_dim')
+            self.U.weight = self.embl.weight
+
+        self.direct_connection = direct_connection
+        if direct_connection:
+            self.W = nn.Linear(self.emb_window_prod, vocab_size, False)
         self.drop = nn.Dropout(dropout)
-
-        self.__init_weights()
-
-    def __init_weights(self):
-        initrange = 0.1
-        nn.init.uniform_(self.embl.weight, -initrange, initrange)
 
     def forward(self, inputs):
         '''
@@ -37,7 +46,9 @@ class NPLM(nn.Module):
         '''
         emb = self.drop(self.embl(inputs)).view((-1, self.emb_window_prod))
         a = self.drop(torch.tanh(self.H(emb)))
-        y = self.U(a) + self.W(emb)
+        y = self.U(a)
+        if self.direct_connection:
+            y += self.W(emb)
         return F.log_softmax(y, dim=1)
 
 
