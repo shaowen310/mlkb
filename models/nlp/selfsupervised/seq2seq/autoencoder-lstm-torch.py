@@ -30,8 +30,8 @@ class EncoderLSTM(nn.Module):
 
     def forward(self, x):
         # set initial hidden and cell states
-        h0 = torch.zeros(self.n_layers, x.size(0), self.hidden_size).to(device)
-        c0 = torch.zeros(self.n_layers, x.size(0), self.hidden_size).to(device)
+        h0 = torch.zeros(self.n_layers, x.size(0), self.hidden_size)
+        c0 = torch.zeros(self.n_layers, x.size(0), self.hidden_size)
 
         # forward propagate lstm
         out, _ = self.lstm(x, (h0, c0))
