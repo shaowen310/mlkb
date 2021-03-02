@@ -35,7 +35,6 @@ class JsonStore(collections.MutableMapping):
 
     def __setitem__(self, key, obj):
         with open(self._getfp(key), 'w') as file:
-            print(obj)
             json.dump(obj, file)
 
     def __delitem__(self, key):
