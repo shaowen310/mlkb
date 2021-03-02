@@ -77,5 +77,6 @@ class ParamStore(JsonStore):
     def add(self, model_name, obj):
         for key in map(lambda randkey: '_'.join((model_name, randkey)), self.keygen):
             if key not in self:
+                obj['id'] = key
                 self[key] = obj
                 return key
