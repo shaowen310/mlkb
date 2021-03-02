@@ -9,7 +9,6 @@ class KeyGen:
         return self
 
     def __next__(self):
-        print(str(uuid.uuid4())[:8])
         return str(uuid.uuid4())[:8]
 
 
@@ -18,18 +17,25 @@ class JsonStore(collections.MutableMapping):
         super().__init__()
         self.root_dir = root_dir
 
+        if not os.path.exists(root_dir):
+            os.makedirs(root_dir)
+
     def _getfp(self, key):
         return os.path.join(self.root_dir, key + '.json')
 
     def __getitem__(self, key):
         try:
+            obj = None
             with open(self._getfp(key), "r") as file:
-                return json.load(file)
+                obj = json.load(file)
         except FileNotFoundError:
-            return None
+            pass
+
+        return obj
 
     def __setitem__(self, key, obj):
         with open(self._getfp(key), 'w') as file:
+            print(obj)
             json.dump(obj, file)
 
     def __delitem__(self, key):
@@ -73,3 +79,4 @@ class ParamStore(JsonStore):
         for key in map(lambda randkey: '_'.join((model_name, randkey)), self.keygen):
             if key not in self:
                 self[key] = obj
+                return key

@@ -17,6 +17,9 @@ class JsonStore(collections.MutableMapping):
         super().__init__()
         self.root_dir = root_dir
 
+        if not os.path.exists(root_dir):
+            os.makedirs(root_dir)
+
     def _getfp(self, key):
         return os.path.join(self.root_dir, key + '.json')
 
@@ -76,4 +79,4 @@ class ParamStore(JsonStore):
         for key in map(lambda randkey: '_'.join((model_name, randkey)), self.keygen):
             if key not in self:
                 self[key] = obj
-                break
+                return key
