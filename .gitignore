@@ -109,6 +109,9 @@ venv.bak/
 data/
 .data/
 data_
+
+model_
+
 *.ckpt
 *.tar
 
