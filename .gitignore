@@ -108,6 +108,7 @@ venv.bak/
 
 data/
 .data/
+data_
 *.ckpt
 *.tar
 
