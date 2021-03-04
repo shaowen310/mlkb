@@ -131,7 +131,7 @@ def train(opt):
             training_metrics = get_evaluation(label.cpu().numpy(),
                                               predictions.cpu().detach().numpy(),
                                               list_metrics=["accuracy"])
-            if not ((iter + 1) % 10000):
+            if not ((iter + 1) % 1000):
                 print("Epoch: {}/{}, Iteration: {}/{}, Lr: {}, Loss: {}, Accuracy: {}".format(
                     epoch + 1, opt.num_epoches, iter + 1, num_iter_per_epoch, optimizer.param_groups[0]['lr'], loss,
                     training_metrics["accuracy"]))
@@ -160,7 +160,7 @@ def train(opt):
             test_metrics = get_evaluation(te_label, te_pred.numpy(), list_metrics=["accuracy", "confusion_matrix"])
             output_file.write("Epoch: {}/{} \nTest loss: {} Test accuracy: {} \nTest confusion matrix: \n{}\n\n".format(
                 epoch + 1, opt.num_epoches, te_loss, test_metrics["accuracy"], test_metrics["confusion_matrix"]))
-            if not ((iter + 1) % 10000):
+            if not ((iter + 1) % 1000):
                 print("Epoch: {}/{}, Lr: {}, Loss: {}, Accuracy: {}".format(epoch + 1, opt.num_epoches,
                                                                             optimizer.param_groups[0]['lr'], te_loss,
                                                                             test_metrics["accuracy"]))
