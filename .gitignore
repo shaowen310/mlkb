@@ -118,3 +118,5 @@ model_
 .vscode/
 
 param_
+
+app.log
