@@ -3,9 +3,9 @@ import itertools
 
 from agnews import AGNewsData
 
-agnews = AGNewsData()
+agnewsdata = AGNewsData()
 
-d_train = agnews.generate_samples(agnews.train_file)
+d_train = agnewsdata.generate_samples(agnewsdata.train_file)
 
 for r in itertools.islice(d_train, 5):
     print(r)
