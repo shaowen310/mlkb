@@ -176,7 +176,7 @@ def train(opt):
             if te_loss + opt['es_min_delta'] < best_loss:
                 best_loss = te_loss
                 best_epoch = epoch
-                torch.save(model, opt['saved_path'] + os.sep + "whole_model_han")
+                torch.save(model, opt['saved_path'] + os.sep + "whole_model_han.pt")
 
             # Early stopping
             if epoch - best_epoch > opt['es_patience'] > 0:
