@@ -14,14 +14,22 @@ from agnews import AGNewsData
 WORD_CUT_OFF = 5
 
 
+def tokenize_sent(doc):
+    return sent_tokenize(doc)
+
+
+def tokenize_word(sent):
+    return word_tokenize(sent)
+
+
 def build_vocab(docs, save_path):
     print('Building vocab ...')
 
-    sents = itertools.chain.from_iterable([sent_tokenize(doc) for doc in docs])
-    tokenized_sents = [word_tokenize(sent) for sent in sents]
+    sents = itertools.chain.from_iterable([tokenize_sent(doc) for doc in docs])
+    tokenized_sents = [tokenize_word(sent) for sent in sents]
 
     # Count the word frequencies
-    word_freq = nltk.FreqDist(itertools.chain(*tokenized_sents))
+    word_freq = nltk.FreqDist(itertools.chain.from_iterable(tokenized_sents))
     print("%d unique words found" % len(word_freq.items()))
 
     # Cut-off
@@ -49,7 +57,7 @@ def build_vocab(docs, save_path):
 def process(word_to_index, data):
     mapped_data = []
     for label, doc in data:
-        mapped_doc = [[word_to_index.get(word, 1) for word in sent.split()] for sent in doc.split('<sssss>')]
+        mapped_doc = [[word_to_index.get(word, 1) for word in tokenize_word(sent)] for sent in tokenize_sent(doc)]
         mapped_data.append((label, mapped_doc))
     return mapped_data
 
@@ -70,7 +78,7 @@ if __name__ == '__main__':
 
     d_train_stream = agnewsdata.generate_samples(agnewsdata.train_file)
     d_train_doc_stream = map(lambda d: d[1]['text'], d_train_stream)
-    word_to_index = build_vocab(d_train_doc_stream, os.path.join(agnewsdata.data_dir, ))
+    word_to_index = build_vocab(d_train_doc_stream, agnewsdata.data_dir)
     d_train_stream = agnewsdata.generate_samples(agnewsdata.train_file)
     d_train_label_doc_stream = map(lambda d: (d[1]['label'], d[1]['text']), d_train_stream)
     mapped_train = process(word_to_index, d_train_label_doc_stream)
