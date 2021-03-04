@@ -22,10 +22,10 @@ class HANDataset(torch.utils.data.Dataset):
             mapped_doc = pickle.load(f)
         doc_encodes, labels = self._prepare(mapped_doc)
 
+        self.num_classes = len(set(labels))
+
         self.doc_encodes = torch.from_numpy(doc_encodes)
         self.labels = torch.from_numpy(labels)
-
-        self.num_classes = len(set(self.labels))
 
     def __len__(self):
         return len(self.labels)

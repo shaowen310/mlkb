@@ -50,7 +50,7 @@ class WordAttNet(nn.Module):
         f_output, h_output = self.gru(output.float(), hidden_state)  # feature output and hidden state output
         output = matrix_mul(f_output, self.word_weight, self.word_bias)
         output = matrix_mul(output, self.context_weight).permute(1, 0)
-        output = F.softmax(output)
+        output = F.softmax(output, dim=1)
         output = element_wise_mul(f_output, output.permute(1, 0))
 
         return output, h_output
@@ -79,7 +79,7 @@ class SentAttNet(nn.Module):
         f_output, h_output = self.gru(input, hidden_state)
         output = matrix_mul(f_output, self.sent_weight, self.sent_bias)
         output = matrix_mul(output, self.context_weight).permute(1, 0)
-        output = F.softmax(output)
+        output = F.softmax(output, dim=1)
         output = element_wise_mul(f_output, output.permute(1, 0)).squeeze(0)
         output = self.fc(output)
 
