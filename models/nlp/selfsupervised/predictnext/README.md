@@ -1,5 +1,15 @@
 # Predict Next Element Given a Sequence
 
+## Data
+
+Should be independent!
+
+Should not be (1, 2, 3) -> 4 and (2, 3, 4) -> 5, should be (1, 2, 3) -> 4, (4, 5, 6) -> 7
+
+## Notes
+
+1. Add `<eos>` token to every sentence.
+
 ## Preliminaries
 
 Given a running text and we extract subsequences with window size $n$. We want to predict the last word by previous words in a subsequence.
