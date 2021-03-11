@@ -4,7 +4,7 @@ import json
 import uuid
 
 
-class KeyGen:
+class UUIDv4Gen:
     def __iter__(self):
         return self
 
@@ -72,10 +72,10 @@ class JsonStore(collections.MutableMapping):
 class ParamStore(JsonStore):
     def __init__(self, root_dir='param_'):
         super().__init__(root_dir)
-        self.keygen = KeyGen()
+        self.idgen = UUIDv4Gen()
 
     def add(self, model_name, obj):
-        for key in map(lambda randkey: '_'.join((model_name, randkey)), self.keygen):
+        for key in map(lambda randkey: '_'.join((model_name, randkey)), self.idgen):
             if key not in self:
                 obj['id_'] = key
                 self[key] = obj
