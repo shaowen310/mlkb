@@ -35,9 +35,14 @@ class AGNewsData:
         urllib.request.urlretrieve(self._TRAIN_DOWNLOAD_URL, self.train_file)
         urllib.request.urlretrieve(self._TEST_DOWNLOAD_URL, self.test_file)
 
-    def generate_samples(self, filepath):
+    @staticmethod
+    def generate_samples(filepath):
         with open(filepath, 'r') as f:
-            csv_reader = csv.reader(f, quotechar='"', delimiter=",", quoting=csv.QUOTE_ALL, skipinitialspace=True)
+            csv_reader = csv.reader(f,
+                                    quotechar='"',
+                                    delimiter=",",
+                                    quoting=csv.QUOTE_ALL,
+                                    skipinitialspace=True)
             for id_, row in enumerate(csv_reader):
                 label, title, description = row
                 # Original labels are [1, 2, 3, 4] ->
