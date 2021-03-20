@@ -133,19 +133,15 @@ class BSBI:
             # merge sort
             term_doc0 = next(term_doc_stream0, None)
             term_doc1 = next(term_doc_stream1, None)
-            pair_last_written = ('', '')
             while (term_doc0 is not None) and (term_doc1 is not None):
                 if term_doc0 <= term_doc1:
                     if term_doc0 == term_doc1:
                         term_doc1 = next(term_doc_stream1, None)
-                    pair_to_be_written = term_doc0
+                    writer.write_pair(term_doc0)
                     term_doc0 = next(term_doc_stream0, None)
                 else:
-                    pair_to_be_written = term_doc1
+                    writer.write_pair(term_doc1)
                     term_doc1 = next(term_doc_stream1, None)
-                if pair_to_be_written != pair_last_written:
-                    writer.write_pair(pair_to_be_written)
-                    pair_last_written = pair_to_be_written
             while term_doc0 is not None:
                 writer.write_pair(term_doc0)
                 term_doc0 = next(term_doc_stream0, None)
