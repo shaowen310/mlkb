@@ -9,7 +9,6 @@ def train_one_epoch(epoch,
                     optimizer,
                     criterion,
                     device,
-                    log_enabled=True,
                     log_interval=1000):
     model.to(device)
     criterion.to(device)
@@ -36,7 +35,7 @@ def train_one_epoch(epoch,
         epoch_loss += batch_loss
         log_loss += batch_loss
 
-        if log_enabled and batch % log_interval == 0 and batch > 0:
+        if log_interval and batch % log_interval == 0 and batch > 0:
             cur_loss = log_loss / log_interval
             elapsed = time.time() - start_time
             print('| epoch {:3d} | {:5d} batches | {:5.2f} ms/batch  | '
