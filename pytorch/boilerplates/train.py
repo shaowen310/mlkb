@@ -3,13 +3,7 @@ import time
 import torch
 
 
-def train_one_epoch(epoch,
-                    model,
-                    dataloader,
-                    optimizer,
-                    criterion,
-                    device,
-                    log_interval=1000):
+def train_one_epoch(epoch, model, dataloader, optimizer, criterion, device, log_interval=1000):
     model.to(device)
     criterion.to(device)
 
@@ -60,4 +54,4 @@ if __name__ == '__main__':
 
     for epoch in range(5):
         epoch_loss = 0
-        print('| epoch {} | epoch_loss {} |'.format(epoch, epoch_loss))
+        print('| epoch {} | epoch_loss {} |'.format(epoch + 1, epoch_loss))

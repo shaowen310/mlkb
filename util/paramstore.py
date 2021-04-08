@@ -60,10 +60,10 @@ class JsonStore(collections.MutableMapping):
         return keyset
 
     def items(self):
-        raise NotImplementedError()
+        raise AttributeError()
 
     def values(self):
-        raise NotImplementedError()
+        raise AttributeError()
 
     def get(self, key):
         return self[key]

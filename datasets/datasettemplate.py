@@ -17,13 +17,16 @@ class SampleData:
         if not os.path.exists(self.data_dir):
             os.mkdir(self.data_dir)
 
-        self.train_file = os.path.join(self.data_dir, self.TRAIN_DATA_NAME)
+        self.train_fp = os.path.join(self.data_dir, self.TRAIN_DATA_NAME)
 
-        if not os.path.exists(self.train_file):
+        if not os.path.exists(self.train_fp):
             self._download()
 
     def _download(self):
-        urllib.request.urlretrieve(self._DOWNLOAD_URL, self.train_file)
+        urllib.request.urlretrieve(self._DOWNLOAD_URL, self.train_fp)
+
+    def _unzip(self):
+        pass
 
     def generate_samples(self):
         data = {}
