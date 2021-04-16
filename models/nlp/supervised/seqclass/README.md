@@ -1,29 +1,29 @@
 # Sequence Classificaton
 
-## Preliminaries
+## Task
 
 Given sequences and labels, we want to train a model that can predict label for new sequences.
 
-## Challenges
+## Data Preprocess
 
 Sequences of different lengths.
 
 Solutions:
 
-1. Cut and padding
+* Cut and padding
 
 ## Model
 
-LSTM
+Seqence -> Embedding -> Label 
+
+<- Loss
 
 ## Loss
 
-Cross-entropy loss if labels don't contain confidence level
+`CrossEntropyLoss` if labels don't contain confidence level
 
-BCEWithLogitsLoss if labels contain confidence level
+`BCEWithLogitsLoss` if labels contain confidence level
 
-## Extension
+## Evaluation
 
-Multi-class problem
-
-BCEWithLogitsLoss
+Accuracy, f1

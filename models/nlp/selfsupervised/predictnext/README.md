@@ -1,53 +1,27 @@
 # Predict Next Element Given a Sequence
 
-## Data
+## Task
 
-Should be independent!
+Given a continuous sequence and a window size \(n\). Slide the window over the whole document continuously, and use the first \(n-1\) tokens in the window to predict the last token.
 
-Should not be (1, 2, 3) -> 4 and (2, 3, 4) -> 5, should be (1, 2, 3) -> 4, (4, 5, 6) -> 7
+This task is often referred to as language modeling.
 
-## Notes
+## Data Preprocess
 
-1. Add `<eos>` token to every sentence.
+Append every sentence with `<eos>` token to let model learn the end of a sentence.
 
-## Preliminaries
+Question: if the punctuation "." is kept in the tokens, do we still need to insert `<eos>` token?
 
-Given a running text and we extract subsequences with window size $n$. We want to predict the last word by previous words in a subsequence.
+## Model
 
-## Models
+Seqeunce -> Embedding -> Label
 
-A neural probabilistic language model (NPLM)
+<- Loss
 
-LSTM
+## Loss
 
-LSTM Output -> fully connected -> log-softmax
-
-## Loss Functions
-
-Cross-entropy loss
+CrossEntropyLoss
 
 ## Evaluation Metrics
 
 Accuracy
-
-## Tips
-
-### Weight initialization
-
-Embedding layer weight
-
-```python
-initrange = 0.1
-nn.init.uniform_(self.encoder.weight, -initrange, initrange)
-```
-
-Why?
-
-### Overfit
-
-Dropout layer after
-
-1. Embedding
-2. Non-linear layer
-
-Try larger dropout rate such as 0.5
