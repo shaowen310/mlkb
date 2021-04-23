@@ -31,7 +31,7 @@ class Corpus:
         self.dict = Dictionary()
         self.train = torch.tensor(())
         self.valid = torch.tensor(())
-        self.text = torch.tensor(())
+        self.test = torch.tensor(())
 
     def parse(self, path):
         self.dict = Dictionary()

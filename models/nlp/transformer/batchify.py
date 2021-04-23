@@ -19,6 +19,19 @@ class CorpusBatchifyDataset(torch.utils.data.Dataset):
         return len(self.data)
 
 
+class CorpusBatchifyWindowDataset(CorpusBatchifyDataset):
+    def __init__(self, text_ids, batch_size, window_size):
+        super().__init__(text_ids, batch_size)
+        self.window_size = window_size
+
+    def __getitem__(self, idx):
+        eid = idx + self.window_size - 1
+        return self.data[idx:eid], self.data[eid]
+
+    def __len__(self):
+        return len(self.data) - self.window_size + 1
+
+
 class CorpusBatchifyBPTTDataset(CorpusBatchifyDataset):
     def __init__(self, text_ids, batch_size, bptt):
         super().__init__(text_ids, batch_size)

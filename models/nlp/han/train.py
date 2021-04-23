@@ -12,7 +12,7 @@ from sklearn import metrics
 # from tensorboardX import SummaryWriter
 
 from dataset import HANDataset
-from model import HierAttNet
+from han import HierAttNet
 import loggingutil
 from paramstore import ParamStore
 
@@ -33,8 +33,8 @@ def get_max_lengths(data_path):
     sorted_word_length = sorted(word_length_list)
     sorted_sent_length = sorted(sent_length_list)
 
-    return sorted_word_length[int(0.8 * len(sorted_word_length))], sorted_sent_length[int(0.8 *
-                                                                                          len(sorted_sent_length))]
+    return sorted_word_length[int(0.8 * len(sorted_word_length))], sorted_sent_length[int(
+        0.8 * len(sorted_sent_length))]
 
 
 def get_evaluation(y_true, y_prob, list_metrics):
@@ -62,10 +62,11 @@ def get_args():
     parser.add_argument("--momentum", type=float, default=0.9)
     parser.add_argument("--word_hidden_size", type=int, default=50)
     parser.add_argument("--sent_hidden_size", type=int, default=50)
-    parser.add_argument("--es_min_delta",
-                        type=float,
-                        default=0.0,
-                        help="Early stopping's parameter: minimum change loss to qualify as an improvement")
+    parser.add_argument(
+        "--es_min_delta",
+        type=float,
+        default=0.0,
+        help="Early stopping's parameter: minimum change loss to qualify as an improvement")
     parser.add_argument(
         "--es_patience",
         type=int,
@@ -75,7 +76,10 @@ def get_args():
     )
     parser.add_argument("--train_set", type=str, default="data_/ag_news/train.pkl")
     parser.add_argument("--test_set", type=str, default="data_/ag_news/test.pkl")
-    parser.add_argument("--test_interval", type=int, default=1, help="Number of epoches between testing phases")
+    parser.add_argument("--test_interval",
+                        type=int,
+                        default=1,
+                        help="Number of epoches between testing phases")
     parser.add_argument("--word2vec_path", type=str, default="data_/ag_news/i2w.pkl")
     parser.add_argument("--log_path", type=str, default="tensorboard/han_voc")
     parser.add_argument("--saved_path", type=str, default="model_")
@@ -98,12 +102,14 @@ def train(opt):
     test_params = {"batch_size": opt['batch_size'], "shuffle": False, "drop_last": False}
 
     max_word_length, max_sent_length = get_max_lengths(opt['train_set'])
-    training_set = HANDataset(opt['train_set'], opt['word2vec_path'], max_sent_length, max_word_length)
+    training_set = HANDataset(opt['train_set'], opt['word2vec_path'], max_sent_length,
+                              max_word_length)
     training_generator = DataLoader(training_set, **training_params)
     test_set = HANDataset(opt['test_set'], opt['word2vec_path'], max_sent_length, max_word_length)
     test_generator = DataLoader(test_set, **test_params)
 
-    model = HierAttNet(opt['word_hidden_size'], opt['sent_hidden_size'], opt['batch_size'], training_set.num_classes,
+    model = HierAttNet(opt['word_hidden_size'],
+                       opt['sent_hidden_size'], opt['batch_size'], training_set.num_classes,
                        len(training_set.index_to_word), max_sent_length, max_word_length)
 
     if os.path.isdir(opt['log_path']):
@@ -138,9 +144,10 @@ def train(opt):
                                               predictions.cpu().detach().numpy(),
                                               list_metrics=["accuracy"])
             if not ((iter + 1) % 100):
-                logger.debug("Epoch: {}/{}, Iteration: {}/{}, Lr: {}, Loss: {}, Accuracy: {}".format(
-                    epoch + 1, opt['num_epoches'], iter + 1, num_iter_per_epoch, optimizer.param_groups[0]['lr'], loss,
-                    training_metrics["accuracy"]))
+                logger.debug(
+                    "Epoch: {}/{}, Iteration: {}/{}, Lr: {}, Loss: {}, Accuracy: {}".format(
+                        epoch + 1, opt['num_epoches'], iter + 1, num_iter_per_epoch,
+                        optimizer.param_groups[0]['lr'], loss, training_metrics["accuracy"]))
             # writer.add_scalar('Train/Loss', loss, epoch * num_iter_per_epoch + iter)
             # writer.add_scalar('Train/Accuracy', training_metrics["accuracy"], epoch * num_iter_per_epoch + iter)
         if epoch % opt['test_interval'] == 0:
@@ -163,13 +170,17 @@ def train(opt):
             te_loss = sum(loss_ls) / test_set.__len__()
             te_pred = torch.cat(te_pred_ls, 0)
             te_label = np.array(te_label_ls)
-            test_metrics = get_evaluation(te_label, te_pred.numpy(), list_metrics=["accuracy", "confusion_matrix"])
-            output_file.write("Epoch: {}/{} \nTest loss: {} Test accuracy: {} \nTest confusion matrix: \n{}\n\n".format(
-                epoch + 1, opt['num_epoches'], te_loss, test_metrics["accuracy"], test_metrics["confusion_matrix"]))
+            test_metrics = get_evaluation(te_label,
+                                          te_pred.numpy(),
+                                          list_metrics=["accuracy", "confusion_matrix"])
+            output_file.write(
+                "Epoch: {}/{} \nTest loss: {} Test accuracy: {} \nTest confusion matrix: \n{}\n\n".
+                format(epoch + 1, opt['num_epoches'], te_loss, test_metrics["accuracy"],
+                       test_metrics["confusion_matrix"]))
 
-            logger.info("Epoch: {}/{}, Lr: {}, Loss: {}, Accuracy: {}".format(epoch + 1, opt['num_epoches'],
-                                                                              optimizer.param_groups[0]['lr'], te_loss,
-                                                                              test_metrics["accuracy"]))
+            logger.info("Epoch: {}/{}, Lr: {}, Loss: {}, Accuracy: {}".format(
+                epoch + 1, opt['num_epoches'], optimizer.param_groups[0]['lr'], te_loss,
+                test_metrics["accuracy"]))
             # writer.add_scalar('Test/Loss', te_loss, epoch)
             # writer.add_scalar('Test/Accuracy', test_metrics["accuracy"], epoch)
             model.train()
@@ -180,7 +191,8 @@ def train(opt):
 
             # Early stopping
             if epoch - best_epoch > opt['es_patience'] > 0:
-                logger.info("Stop training at epoch {}. The lowest loss achieved is {}".format(epoch, te_loss))
+                logger.info("Stop training at epoch {}. The lowest loss achieved is {}".format(
+                    epoch, te_loss))
                 break
 
             output_file.close()

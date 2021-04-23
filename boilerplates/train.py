@@ -2,6 +2,8 @@ import math
 import time
 import torch
 
+dataloader = None
+
 
 def train_one_epoch(epoch, model, dataloader, optimizer, criterion, device, log_interval=1000):
     model.to(device)
@@ -33,8 +35,9 @@ def train_one_epoch(epoch, model, dataloader, optimizer, criterion, device, log_
             cur_loss = log_loss / log_interval
             elapsed = time.time() - start_time
             print('| epoch {:3d} | {:5d} batches | {:5.2f} ms/batch  | '
-                  'loss {:5.2f} | ppl {:8.2f} |'.format(epoch, batch, elapsed * 1000 / log_interval,
-                                                        cur_loss, math.exp(cur_loss)))
+                  'loss {:5.2f} | ppl {:8.2f} |'.format(epoch + 1, batch + 1,
+                                                        elapsed * 1000 / log_interval, cur_loss,
+                                                        math.exp(cur_loss)))
             log_loss = 0
             start_time = time.time()
 
@@ -49,9 +52,15 @@ if __name__ == '__main__':
     model.to(device)
     criterion.to(device)
 
-    optimizer = torch.optim.SGD(model.parameters())
+    optimizer = torch.optim.Adam(model.parameters())
     scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=30, gamma=0.1)
 
     for epoch in range(5):
-        epoch_loss = 0
+        epoch_loss = train_one_epoch(epoch,
+                                     model,
+                                     dataloader,
+                                     optimizer,
+                                     criterion,
+                                     device,
+                                     log_interval=1000)
         print('| epoch {} | epoch_loss {} |'.format(epoch + 1, epoch_loss))
