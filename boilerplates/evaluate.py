@@ -4,7 +4,7 @@ import torch
 def evaluate(model, dataloader, criterion, device='cpu'):
     model.to(device)
     criterion.to(device)
-    
+
     model.eval()
 
     epoch_loss = 0
@@ -19,4 +19,4 @@ def evaluate(model, dataloader, criterion, device='cpu'):
 
             epoch_loss += loss.item()
 
-    return epoch_loss / len(dataloader)
+    return labels, preds, epoch_loss / len(dataloader)
