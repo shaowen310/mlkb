@@ -16,6 +16,8 @@ wget https://rajpurkar.github.io/SQuAD-explorer/dataset/dev-v1.1.json -O "dev-v1
 
 huggingface
 
+description https://huggingface.co/datasets/squad
+
 ```python
 from datasets import load_dataset
 
