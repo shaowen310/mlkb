@@ -115,7 +115,7 @@ model_
 *.ckpt
 *.tar
 
-.vscode/
+.vscode/settings.json
 
 param_
 
