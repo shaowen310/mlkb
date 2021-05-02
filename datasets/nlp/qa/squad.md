@@ -18,6 +18,8 @@ huggingface
 
 description https://huggingface.co/datasets/squad
 
+code https://github.com/huggingface/datasets/tree/master/datasets/squad
+
 ```python
 from datasets import load_dataset
 
