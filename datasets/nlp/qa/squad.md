@@ -20,6 +20,10 @@ description https://huggingface.co/datasets/squad
 
 code https://github.com/huggingface/datasets/tree/master/datasets/squad
 
+Statistics
+
+\# of training-samples (or q-a pairs): 88524
+
 ```python
 from datasets import load_dataset
 
