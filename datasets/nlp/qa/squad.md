@@ -56,6 +56,12 @@ wget https://rajpurkar.github.io/SQuAD-explorer/dataset/train-v2.0.json -O "trai
 wget https://rajpurkar.github.io/SQuAD-explorer/dataset/dev-v2.0.json -O "dev-v2.0.json"
 ```
 
+huggingface
+
+description https://huggingface.co/datasets/squad
+
+code https://github.com/huggingface/datasets/tree/master/datasets/squad_v2
+
 Statistics
 
 \# of training-samples (or questions): 130319, validation: 11873
