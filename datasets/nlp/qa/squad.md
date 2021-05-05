@@ -22,7 +22,7 @@ code https://github.com/huggingface/datasets/tree/master/datasets/squad
 
 Statistics
 
-\# of training-samples (or q-a pairs): 88524
+\# of training-samples (or questions): 87599, validation: 10570
 
 ```python
 from datasets import load_dataset
@@ -55,3 +55,7 @@ wget https://rajpurkar.github.io/SQuAD-explorer/dataset/train-v2.0.json -O "trai
 
 wget https://rajpurkar.github.io/SQuAD-explorer/dataset/dev-v2.0.json -O "dev-v2.0.json"
 ```
+
+Statistics
+
+\# of training-samples (or questions): 130319, validation: 11873
