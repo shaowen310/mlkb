@@ -45,3 +45,9 @@ archivePrefix = {arXiv},
 ### V2.0
 
 Download link https://rajpurkar.github.io/SQuAD-explorer/
+
+```shell
+wget https://rajpurkar.github.io/SQuAD-explorer/dataset/train-v2.0.json -O "train-v2.0.json"
+
+wget https://rajpurkar.github.io/SQuAD-explorer/dataset/dev-v2.0.json -O "dev-v2.0.json"
+```
