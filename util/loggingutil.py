@@ -1,7 +1,7 @@
 import logging
 import sys
 from logging import FileHandler
-FORMATTER = logging.Formatter("%(asctime)s — %(name)s — %(levelname)s — %(message)s")
+FORMATTER = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 LOG_FILE = "app.log"
 
 
