@@ -5,7 +5,14 @@ import torch
 dataloader = None
 
 
-def train_one_epoch(epoch, model, dataloader, optimizer, criterion, device, log_interval=1000):
+def train_one_epoch(epoch,
+                    model,
+                    criterion,
+                    dataloader,
+                    optimizer,
+                    device,
+                    scheduler=None,
+                    log_interval=1000):
     model.to(device)
     criterion.to(device)
 
@@ -26,6 +33,8 @@ def train_one_epoch(epoch, model, dataloader, optimizer, criterion, device, log_
 
         loss.backward()
         optimizer.step()
+        if scheduler is not None:
+            scheduler.step()
 
         batch_loss = loss.item()
         epoch_loss += batch_loss
@@ -63,4 +72,5 @@ if __name__ == '__main__':
                                      criterion,
                                      device,
                                      log_interval=1000)
+        scheduler.step()
         print('| epoch {} | epoch_loss {} |'.format(epoch + 1, epoch_loss))

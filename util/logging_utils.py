@@ -1,6 +1,7 @@
 import logging
 import sys
 from logging import FileHandler
+
 FORMATTER = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 LOG_FILE = "app.log"
 
@@ -17,9 +18,9 @@ def get_file_handler():
     return file_handler
 
 
-def get_logger(logger_name):
+def get_logger(logger_name, level=logging.DEBUG):
     logger = logging.getLogger(logger_name)
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(level)
     logger.addHandler(get_console_handler())
     logger.addHandler(get_file_handler())
     logger.propagate = False
