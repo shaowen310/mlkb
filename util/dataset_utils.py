@@ -17,13 +17,13 @@ def save_dataset(dataset: datasets.Dataset, output_dir, dataset_args=None):
             json.dump(dataset_args.__dict__, f)
 
 
-def load_dataset(dir=None, generate_dataset_func=None, dataset_args=None):
-    if dir is not None and os.path.isdir(dir):
-        _logger.info(f"Loading dataset from {dir}")
-        return datasets.load_from_disk(dir)
+def load_dataset(generate_dataset_func, cache_dir=None, dataset_args=None):
+    if cache_dir is not None and os.path.isdir(cache_dir):
+        _logger.info(f"Loading dataset from {cache_dir}")
+        return datasets.load_from_disk(cache_dir)
     else:
         dataset = generate_dataset_func()
-        if dir is not None:
-            _logger.info(f"Saving dataset to {dir}")
-            save_dataset(dataset, dir, dataset_args=dataset_args)
+        if cache_dir is not None:
+            _logger.info(f"Saving dataset to {cache_dir}")
+            save_dataset(dataset, cache_dir, dataset_args=dataset_args)
         return dataset
